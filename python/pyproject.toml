@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zmq_network"
+version = "0.1.0"
+description = "ZMQ networking abstraction library"
+requires-python = ">=3.8"
+
+dependencies = [
+    "pyzmq",
+]
+
+# Package discovery and data files
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+zmq_network = [
+    "config/*.json",
+    "config/*.yaml",
+    "config/*.yml",
+]

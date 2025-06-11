@@ -192,3 +192,13 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+.envrc
+.direnv
+
+# Ignore Python virtual environment directories and config
+bin/
+pyvenv.cfg
+
+lib64
+result
