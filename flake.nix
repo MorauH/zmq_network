@@ -41,20 +41,37 @@
             };
 
             cpp = pkgs.stdenv.mkDerivation {
-                name = "zmq-network-cpp";
+                name = "zmq-network";
                 version = version;
                 src = ./cpp;
 
                 nativeBuildInputs = with pkgs; [
                     cmake
-                    nlohmann-json
+                    pkg-config
                 ];
-                
+
+                buildInputs = with pkgs; [
+                    zeromq
+                    cppzmq
+                    nlohmann_json
+                ];
+
                 cmakeFlags = [
                     "-DCMAKE_BUILD_TYPE=Release"
+                    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
                 ];
+
+                installPhase = ''
+                  make install
+                '';
                 
                 doCheck = false;  # disable tests
+
+                meta = with pkgs.lib; {
+                    description = "ZMQ networking library";
+                    license = licenses.mit; 
+                    platforms = platforms.unix;
+                };
             };
 
             # default to python
@@ -62,7 +79,6 @@
         };
         
         devShells.default = pkgs.mkShell {
-          venvDir = "./python/.venv";
 
           buildInputs = with pkgs; [
             # Python
@@ -73,13 +89,11 @@
             # C++ development
             cmake
             pkg-config
-            zeromq
-            zmqpp
+            cppzmq
             nlohmann_json
 
             # General
             git
-            # uv
           ];
 
           PACKAGE_VERSION = version;
