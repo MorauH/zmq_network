@@ -20,19 +20,11 @@
         },
         "example_ipc": {
             "topics": ["ex"],
-            "is_ipc": false,
+            "is_ipc": true,
             "address": "/tmp/example.ipc"
         },
         "gimbal": {
             "topics": ["control/gimbal"],
-            "is_ipc": false,
-            "address": "127.0.0.1",
-            "port": 5655
-        }
-    },
-    "external": {
-        "example": {
-            "topics": ["ex/2"],
             "is_ipc": false,
             "address": "127.0.0.1",
             "port": 5655

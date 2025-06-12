@@ -16,6 +16,5 @@ __all__ = [
     'Node',
     'get_node_topics',
     'get_node_address',
-    'is_valid_topic',
-    'load_config'
+    'is_valid_topic'
 ]

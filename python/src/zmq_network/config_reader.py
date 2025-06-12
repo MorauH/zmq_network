@@ -1,12 +1,16 @@
 import json
 import os
-config = None
 
+config = None
 
 def load_config(config_path: str):
     global config
     with open(config_path, "r") as f:
         config = json.load(f)
+
+
+config_path = os.getenv('NODE_CONFIG_PATH', f"{os.getcwd()}/config.json")
+load_config(config_path)
 
 
 def get_node_address(node: str) -> str:
