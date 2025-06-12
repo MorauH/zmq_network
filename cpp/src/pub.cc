@@ -14,8 +14,8 @@ using json = nlohmann::json;
 namespace zmq_network {
 
 // Constructor implementation
-Publisher::Publisher(const std::string& configFilename)
-    : configFilename_(configFilename), context_(1), socket_(nullptr) {}
+Publisher::Publisher()
+    : context_(1), socket_(nullptr) {}
 
 // Destructor implementation
 Publisher::~Publisher() {
@@ -27,7 +27,7 @@ Publisher::~Publisher() {
 // Method implementations
 bool Publisher::connectPublisher(const std::string& nodeName, std::optional<std::string> std_topic) {
     // Read configuration from file
-    json config = Helper::readConfig(configFilename_);
+    json config = Helper::readConfig();
     if (config.empty() || !config.contains("nodes")) {
         return false;
     }

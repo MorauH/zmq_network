@@ -10,13 +10,17 @@ namespace Helper {
 
 /**
  * Reads and parses a JSON configuration file
- * @param filename Path to the configuration file
+ * @param file_path Path to the configuration file
  * @return JSON object containing the parsed configuration, or empty object on error
  */
-inline nlohmann::json readConfig(const std::string& filename) {
-    std::ifstream file(filename);
+inline nlohmann::json readConfig() {
+    
+    const char* env_path = std::getenv("NODE_CONFIG_PATH");
+    std::string file_path = (env_path != nullptr) ? std::string(env_path) : "config.json";
+
+    std::ifstream file(file_path);
     if (!file.is_open()) {
-        std::cerr << "Error: Could not open config file: " << filename << std::endl;
+        std::cerr << "Error: Could not open config file: " << file_path << std::endl;
         return {};
     }
     

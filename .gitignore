@@ -202,3 +202,5 @@ pyvenv.cfg
 
 lib64
 result
+
+.vscode
