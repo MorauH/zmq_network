@@ -78,7 +78,7 @@ class Node:
             raise Exception("Node name not set")
         try:
             # fetch node configs
-            address = get_noconfig_example.jsonde_address(self.node_name)
+            address = get_node_address(self.node_name)
         except Exception as e:
             print(e)
             print("Binding failed!")
