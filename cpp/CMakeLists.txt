@@ -12,7 +12,7 @@ set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
 # --- Build Library ---
-add_library(zmq_network "${SRC_DIR}/pub.cc" "${SRC_DIR}/sub.cc")
+add_library(zmq_network "${SRC_DIR}/node.cc")
 
 # --- Set target properties ---
 set_target_properties(zmq_network PROPERTIES

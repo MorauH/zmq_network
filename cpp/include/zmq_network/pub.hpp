@@ -12,11 +12,10 @@ public:
     Publisher();
     ~Publisher();
 
-    bool connectPublisher(const std::string& nodeName, std::optional<std::string> std_topic = std::nullopt);
+    bool connectPublisher(zmq::context_t& context, const std::string& nodeName, std::optional<std::string> std_topic = std::nullopt);
     bool sendMessage(const std::string& message, std::optional<std::string> topicOverride = std::nullopt);
 
 private:
-    zmq::context_t context_;
     std::unique_ptr<zmq::socket_t> socket_;
     std::string topic_;
 };
