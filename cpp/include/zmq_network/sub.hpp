@@ -12,11 +12,10 @@ public:
     Subscriber();
     ~Subscriber();
 
-    bool connectSubscriber(const std::string& nodeName, const std::string& topic);
+    bool connectSubscriber(zmq::context_t& context, const std::string& nodeName, const std::string& topic);
     bool receiveMessage(std::string& message);
 
 private:
-    zmq::context_t context_;
     std::unique_ptr<zmq::socket_t> socket_;
     uint16_t topicHeaderBytes_;
 };
