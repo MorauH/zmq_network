@@ -1,33 +1,43 @@
 {
     "nodes": {
         "test": {
-            "topics": ["test", "cam"],
-            "is_ipc": false,
-            "address": "127.0.0.1",
-            "port": 5556
+            "publisher": {
+                "topics": ["test", "cam"],
+                "is_ipc": false,
+                "address": "127.0.0.1",
+                "port": 5556
+            }
         },
         "depth_camera": {
-            "topics": ["sensor/depthcamera"],
-            "is_ipc": false,
-            "address": "127.0.0.1",
-            "port": 5556
+            "publisher": {
+                "topics": ["sensor/depthcamera"],
+                "is_ipc": false,
+                "address": "127.0.0.1",
+                "port": 5556
+            }
         },
         "lidar": {
-            "topics": ["sensor/lidar"],
-            "is_ipc": false,
-            "address": "127.0.0.1",
-            "port": 5557
+            "publisher": {
+                "topics": ["sensor/lidar"],
+                "is_ipc": false,
+                "address": "127.0.0.1",
+                "port": 5557
+            }
         },
         "example_ipc": {
-            "topics": ["ex"],
-            "is_ipc": true,
-            "address": "/tmp/example.ipc"
+            "publisher": {
+                "topics": ["ex"],
+                "is_ipc": true,
+                "address": "/tmp/example.ipc"
+            }
         },
         "gimbal": {
-            "topics": ["control/gimbal"],
-            "is_ipc": false,
-            "address": "127.0.0.1",
-            "port": 5655
+            "publisher": {
+                "topics": ["control/gimbal"],
+                "is_ipc": false,
+                "address": "127.0.0.1",
+                "port": 5655   
+            }
         }
     }
 }

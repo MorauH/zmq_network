@@ -37,7 +37,12 @@ bool Subscriber::connectSubscriber(zmq::context_t& context, const std::string& n
         return false;
     }
 
-    const json& nodeConfig = config["nodes"][nodeName];
+    if (!config["nodes"][nodeName].contains("publisher")) {
+        std::cerr << "Error: Publisher configuration not found for: " << nodeName << std::endl;
+        return false;
+    }
+
+    const json& nodeConfig = config["nodes"][nodeName]["publisher"];
 
     if (!nodeConfig.contains("topics") || !nodeConfig.contains("is_ipc")) {
         std::cerr << "Error: Missing required configuration fields for: " << nodeName << std::endl;
