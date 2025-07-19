@@ -9,13 +9,14 @@ namespace zmq_network {
 
 class Subscriber {
 public:
-    Subscriber();
+    Subscriber(zmq::context_t& context);
     ~Subscriber();
 
-    bool connectSubscriber(zmq::context_t& context, const std::string& nodeName, const std::string& topic);
+    bool connectSubscriber(const std::string& nodeName, const std::string& topic);
     bool receiveMessage(std::string& message);
 
 private:
+    zmq::context_t& context_;
     std::unique_ptr<zmq::socket_t> socket_;
     uint16_t topicHeaderBytes_;
 };

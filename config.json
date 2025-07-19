@@ -6,6 +6,16 @@
                 "is_ipc": false,
                 "address": "127.0.0.1",
                 "port": 5556
+            },
+            "responder": {
+                "is_ipc": false,
+                "address": "127.0.0.1",
+                "port": 5557
+            },
+            "router": {
+                "is_ipc": false,
+                "address": "127.0.0.1",
+                "port": 5558
             }
         },
         "depth_camera": {
