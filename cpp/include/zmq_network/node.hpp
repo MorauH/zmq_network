@@ -10,6 +10,7 @@
 #include "zmq_network/sub.hpp"
 #include "zmq_network/req.hpp"
 #include "zmq_network/resp.hpp"
+#include "zmq_network/router.hpp"
 
 namespace zmq_network {
 
@@ -27,12 +28,15 @@ public:
 
     bool sendRequest(const std::string& nodeName, const std::string& message, std::string& response);
 
+    bool connectRouter(const std::string& nodeName, Router::MessageHandler message_handler);
+
 private:
     zmq::context_t context_;
     Publisher publisher_;
     std::vector<std::shared_ptr<Subscriber>> subscribers_;
     Requester requester_;
     Responder responder_;
+    Router router_;
 
     std::mutex mutex_;
     bool singleThreadedResponses_;

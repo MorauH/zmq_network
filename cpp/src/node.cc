@@ -23,6 +23,7 @@ Node::Node(bool singleThreadedResponses)
     subscribers_(std::vector<std::shared_ptr<Subscriber>>()),
     requester_(Requester(context_)),
     responder_(Responder(context_)),
+    router_(Router(context_)),
     singleThreadedResponses_(singleThreadedResponses) {}
 
 // Destructor implementation
@@ -35,6 +36,7 @@ Node::~Node() {
     }
     requester_.~Requester();
     responder_.~Responder();
+    router_.~Router();
 
     // destroy context (closes all sockets and their blocked threads)
     context_.close();
@@ -117,6 +119,15 @@ bool Node::connectResponder(const std::string& nodeName, std::function<bool(std:
     });
 
     return true;
+}
+
+bool Node::connectRouter(const std::string& nodeName, Router::MessageHandler message_handler) {
+    if (!router_.connectRouter(nodeName, message_handler)) {
+        std::cerr << "Failed to connect router" << std::endl;
+        return false;
+    }
+
+    return router_.start();
 }
 
 bool Node::sendRequest(const std::string& nodeName, const std::string& message, std::string& response) {
