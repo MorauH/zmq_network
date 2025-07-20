@@ -3,7 +3,7 @@
 
 #include <string>
 #include <zmq.hpp>
-#include <nlohmann/json.hpp>
+#include <memory>
 
 namespace zmq_network {
 

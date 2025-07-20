@@ -1,13 +1,7 @@
 
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <chrono>
-#include <functional>
-#include <zmq.hpp>
 #include <nlohmann/json.hpp>
-#include <memory>
-#include "zmq_network/sub.hpp"
+#include "zmq_network/req.hpp"
 #include "zmq_network/helper.hpp"
 
 using json = nlohmann::json;
@@ -78,13 +72,7 @@ bool Requester::sendRequest(const std::string& nodeName, const std::string& mess
         return false;
     }
 
-    
-    // send
-    if (!socket_) {
-        std::cerr << "Error: Socket not initialized!" << std::endl;
-        return false;
-    }
-    
+    // Send request
     try {
         zmq::message_t request(message.data(), message.size());
         socket_->send(request, zmq::send_flags::none);
@@ -108,6 +96,14 @@ bool Requester::sendRequest(const std::string& nodeName, const std::string& mess
         } else {
             std::cerr << "ZMQ error: " << e.what() << std::endl;
         }
+        return false;
+    }
+
+    // Disconnect
+    try {
+        socket_->disconnect(full_address);
+    } catch (zmq::error_t& e) {
+        std::cerr << "ZeroMQ error: " << e.what() << std::endl;
         return false;
     }
 

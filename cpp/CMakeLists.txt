@@ -11,8 +11,11 @@ find_package(nlohmann_json REQUIRED)
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
+# --- Collect all source files ---
+file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cc" "${SRC_DIR}/*.cpp")
+
 # --- Build Library ---
-add_library(zmq_network "${SRC_DIR}/node.cc")
+add_library(zmq_network ${SOURCES})
 
 # --- Set target properties ---
 set_target_properties(zmq_network PROPERTIES
@@ -60,7 +63,6 @@ if(EXISTS "${INCLUDE_DIR}")
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
     )
 endif()
-
 
 # --- Simple export (for find_package support) ---
 install(EXPORT zmq_network_targets

@@ -6,11 +6,7 @@
 #include <atomic>
 #include <thread>
 #include <functional>
-#include <chrono>
-#include <nlohmann/json.hpp>
-#include "zmq_network/req.hpp"
-
-
+#include <memory>
 
 namespace zmq_network {
     

@@ -1,9 +1,9 @@
-#include <string>
-#include <zmq.hpp>
+#include <iostream>
 #include <nlohmann/json.hpp>
-
 #include "zmq_network/router.hpp"
 #include "zmq_network/helper.hpp"
+
+using json = nlohmann::json;
 
 namespace zmq_network {
 
@@ -144,18 +144,18 @@ void Router::workerLoop() {
             } else {
                 std::cerr << "ZMQ error: " << e.what() << std::endl;
             }
-            return false;
+            break;
         }
     }
 
     std::cout << "Router worker thread stopped" << std::endl;
 }
 
-void processMessage() {
+void Router::processMessage() {
     try {
         // Receive identity frame
         zmq::message_t identity;
-        auto result = socket_.recv(identity, zmq::recv_flags::none);
+        auto result = socket_->recv(identity, zmq::recv_flags::none);
         if (!result) {
             std::cerr << "Failed to receive identity frame" << std::endl;
             return;
@@ -165,7 +165,7 @@ void processMessage() {
 
         // Receive message
         zmq::message_t message;
-        result = socket_.recv(message, zmq::recv_flags::none);
+        result = socket_->recv(message, zmq::recv_flags::none);
         if (!result) {
             std::cerr << "Failed to receive message" << std::endl;
             return;

@@ -1,13 +1,7 @@
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <chrono>
-#include <functional>
-#include <zmq.hpp>
-#include <nlohmann/json.hpp>
-#include <memory>
 #include "zmq_network/sub.hpp"
 #include "zmq_network/helper.hpp"
+#include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 

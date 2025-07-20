@@ -3,9 +3,8 @@
 
 #include <string>
 #include <vector>
-#include <memory>
+#include <mutex>
 #include <zmq.hpp>
-#include <nlohmann/json.hpp>
 #include "zmq_network/pub.hpp"
 #include "zmq_network/sub.hpp"
 #include "zmq_network/req.hpp"
@@ -34,6 +33,7 @@ private:
     zmq::context_t context_;
     Publisher publisher_;
     std::vector<std::shared_ptr<Subscriber>> subscribers_;
+    std::vector<std::thread> subscriber_threads_;
     Requester requester_;
     Responder responder_;
     Router router_;

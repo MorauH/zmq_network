@@ -3,7 +3,8 @@
 
 #include <string>
 #include <zmq.hpp>
-#include <nlohmann/json.hpp>
+#include <memory>
+#include <optional>
 
 namespace zmq_network {
 
@@ -16,6 +17,7 @@ public:
     bool sendMessage(const std::string& message, std::optional<std::string> topicOverride = std::nullopt);
 
 private:
+    zmq::context_t& context_;
     std::unique_ptr<zmq::socket_t> socket_;
     std::string topic_;
 };

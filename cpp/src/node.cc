@@ -1,15 +1,12 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <chrono>
 #include <functional>
 #include <thread>
 #include <atomic>
-#include <mutex>
-#include <zmq.hpp>
-#include <nlohmann/json.hpp>
 #include <memory>
+#include <nlohmann/json.hpp>
 #include "zmq_network/node.hpp"
 
 using json = nlohmann::json;
@@ -21,6 +18,7 @@ Node::Node(bool singleThreadedResponses)
     : context_(1),
     publisher_(Publisher(context_)),
     subscribers_(std::vector<std::shared_ptr<Subscriber>>()),
+    subscriber_threads_(std::vector<std::thread>()),
     requester_(Requester(context_)),
     responder_(Responder(context_)),
     router_(Router(context_)),
@@ -28,18 +26,15 @@ Node::Node(bool singleThreadedResponses)
 
 // Destructor implementation
 Node::~Node() {
-    publisher_.~Publisher();
-    if (!subscribers_.empty()) {
-        for (auto& subscriber : subscribers_) {
-            subscriber->~Subscriber();
-        }
-    }
-    requester_.~Requester();
-    responder_.~Responder();
-    router_.~Router();
-
     // destroy context (closes all sockets and their blocked threads)
     context_.close();
+
+    // join threads
+    for (auto& thread : subscriber_threads_) {
+        if (thread.joinable()) {
+            thread.join();
+        }
+    }
 }
 
 // Method implementations
@@ -52,14 +47,17 @@ bool Node::publishMessage(const std::string& message, std::optional<std::string>
 }
 
 bool Node::connectSubscriber(const std::string& nodeName, const std::string& topic, std::function<bool(std::string&)> callable) {
+    std::cout << "Creating subscriber.." << std::endl;
     auto subscriber = std::make_shared<Subscriber>(context_);
+    std::cout << "Subscriber created" << std::endl;
     if (!subscriber->connectSubscriber(nodeName, topic)) {
         return false;
     }
-    subscribers_.push_back(std::move(subscriber));
+    std::cout << "Subscriber connected" << std::endl;
+    subscribers_.push_back(subscriber);
 
     // Start new thread, enters reciever loop
-    std::thread t([this, &subscriber, &callable]() {
+    std::thread t([this, subscriber, callable]() {
         std::string message;
         bool success;
         while (subscriber->receiveMessage(message)) {
@@ -79,8 +77,8 @@ bool Node::connectSubscriber(const std::string& nodeName, const std::string& top
         std::cout << "Subscriber thread exited" << std::endl;
     });
 
-    // Detach thread from local scope
-    t.detach();
+    subscriber_threads_.push_back(std::move(t));
+
     return true;
 }
 
@@ -90,7 +88,7 @@ bool Node::connectResponder(const std::string& nodeName, std::function<bool(std:
     }
 
     // Start new thread, enters reciever loop
-    std::thread t([this, &callable]() {
+    std::thread t([this, callable]() {
         std::string request;
         std::string response;
         bool success;
@@ -117,6 +115,8 @@ bool Node::connectResponder(const std::string& nodeName, std::function<bool(std:
         }
         std::cout << "Responder thread exited" << std::endl;
     });
+
+    t.detach();
 
     return true;
 }

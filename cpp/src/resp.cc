@@ -1,11 +1,5 @@
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <chrono>
-#include <functional>
-#include <zmq.hpp>
 #include <nlohmann/json.hpp>
-#include <memory>
 #include "zmq_network/resp.hpp"
 #include "zmq_network/helper.hpp"
 
@@ -81,7 +75,7 @@ bool Responder::connectResponder(const std::string& nodeName) {
         return false;
     }
     
-    std::cout << topic_ << " connected on " << full_address << std::endl;
+    std::cout << "Responder connected on " << full_address << std::endl;
     return true;
 }
 
@@ -107,18 +101,6 @@ bool Responder::receiveRequest(std::string& request) {
 
     request = std::string(static_cast<char*>(requestMsg.data()), requestMsg.size());
     return true;
-
-    // std::string response;
-    // // Send response
-    // try {
-    //     zmq::message_t responseMsg(response.data(), response.size());
-    //     socket_->send(responseMsg, zmq::send_flags::none);
-    // } catch (const zmq::error_t& e) {
-    //     std::cerr << "ZMQ error: " << e.what() << std::endl;
-    //     return false;
-    // }
-
-    // return true;
 }
 
 bool Responder::sendResponse(const std::string& response) {
